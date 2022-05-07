@@ -6,47 +6,54 @@ using System.Threading.Tasks;
 
 namespace CalculatorProject
 {
-    class Calculator
+    public class Calculator
     {
+        private readonly IParser _parser;
+
+        public Calculator(IParser parser)
+        {
+            _parser = parser;
+        }
+
         public int CalculateExpression(string exprString)
         {
-            string[] parts = exprString.Split(' ');
-            int left = Convert.ToInt32(parts[0]);
-            string oper = parts[1];
-            int right = Convert.ToInt32(parts[0]);
-            
+            BinaryOperation binaryOperation = _parser.Parse(exprString);
+            return CalculateExpression(binaryOperation);
+        }
 
-            switch (oper)
+        public int CalculateExpression(BinaryOperation binary)
+        {
+            switch (binary.Operator)
             {
                 case "+":
-                    return Add(left, right);
+                    return Add(binary.Left, binary.Right);
                 case "-":
-                    return Subtract(right, left);
+                    return Subtract(binary.Right, binary.Left);
                 case "*":
-                    return Multiply(left, left);
+                    return Multiply(binary.Left, binary.Left);
                 case "/":
-                    return Subtract(left, right);
+                    return Divide(binary.Left, binary.Right);
                 default:
                     throw new ArgumentException("Unrecognized operator");
             }
         }
 
-        private int Divide(int left, int right)
+        public int Divide(int left, int right)
         {
             return left / right;
         }
 
-        private int Multiply(int left, int right)
+        public int Multiply(int left, int right)
         {
             return left * right;
         }
 
-        private int Subtract(int left, int right)
+        public int Subtract(int left, int right)
         {
             return left - right;
         }
 
-        private int Add(int left, int right)
+        public int Add(int left, int right)
         {
             return left + right;
         }

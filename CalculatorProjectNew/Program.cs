@@ -10,7 +10,22 @@ namespace CalculatorProject
     {
         static void Main(string[] args)
         {
-            var calc = new Calculator();
+            Console.WriteLine("Do you prefer normal notation?");
+            Console.WriteLine("Enter Y for normal, N for Reverse Polish:");
+            string userPref = Console.ReadLine();
+
+            IParser parser;
+            if (userPref.Equals("Y", StringComparison.OrdinalIgnoreCase))
+            {
+                parser = new Parser();
+            }
+            else
+            {
+                parser = new ReversePolishParser();
+            }
+
+
+            var calc = new Calculator(parser);
             while (true)
             {
                 Console.WriteLine("Enter an expression like '3 + 7': ");
